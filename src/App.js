@@ -3,18 +3,35 @@ import './App.css';
 import { store } from "./store";
 import { Provider } from "react-redux";
 
-import { NavBar } from './components/NavBar';
-import { Main } from './components/Main';
+import { Home } from './views/Home';
+import { Login } from './views/Login';
+import { UserDetail } from './views/UserDetail';
+
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Link,
+  useParams,
+  useNavigate,
+  useSearchParams
+} from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
     <Provider store={store}>
-      
-      <NavBar color='primary' dark={true} expand={true}/>
-      <Main />
+      <BrowserRouter>
+    
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/user/:id" element={<UserDetail />} />
+      </Routes>
 
+      </BrowserRouter>     
     </Provider>
   );
 }
