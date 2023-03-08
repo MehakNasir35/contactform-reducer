@@ -14,27 +14,55 @@ export function Section() {
 
         e.preventDefault();
         const { name, email, number, gender } = e.target;
-        let btnClass = "warning"
-        let imageSource = `${pic8}`
+        let image = `${pic8}`
 
         if (gender.value == "Male") {
-            btnClass = "danger"
-            imageSource = `${pic4}`
+            image = `${pic4}`
         }
 
         const payload = {
-            name: name.value,
+            username: name.value,
+            firstName:"first",
+            lastName:"last",
             email: email.value,
-            number: number.value,
+            phone: number.value,
             gender: gender.value,
-            btnClass,
-            imageSource,
+            age:23,
+            birthDate:'2000-12-25',
+            bloodGroup:'A−',
+            weight:'75.4',
+            height:'189',
+            address:{
+                address:'1745 T Street Southeast',
+                city:'Washington',
+                state:'DC',
+                postalCode:'20020',
+            },
+            image,
+            university:'Capitol University',
+            company:{
+                name:"Blanda-O'Keefe",
+                title:'Help Desk Operator',
+                department:'Marketing',
+            },
+            bank:{
+                cardNumber:'50380955204220685',
+                cardType:'maestro',
+                iban:'NO17 0695 2754 967',
+            },
+
         }
 
-        dispatch({
-            type: "ADD-USER",
-            payload
-        });
+        fetch('https://dummyjson.com/users/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+            .then(res => res.json())
+            .then(payload => dispatch({
+                type: "ADD_USER",
+                payload
+            }));
 
     };
 

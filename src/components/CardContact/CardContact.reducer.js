@@ -1,58 +1,41 @@
-
-import pic1 from '../../images/pic1.png';
-import pic2 from '../../images/pic2.png';
-import pic3 from '../../images/pic3.png';
-
-// let usersArray = [{
-//   "name": "Erafi Ahonaf",
-//   "email": "erafi@gmail.com",
-//   "number": "01875510966",
-//   "btnClass": "danger",
-//   "gender": "Male",
-//   "imageSource": `${pic1}`,
-//   "maritalStatus": "married",
-//   "age":23,
-// }, {
-//   "name": "Ishan Sarkar",
-//   "email": "ishan@gmail.com",
-//   "number": "01719058105",
-//   "btnClass": "warning",
-//   "gender": "Female",
-//   "imageSource": `${pic2}`,
-//   "maritalStatus": "married",
-//   "age":26,
-
-// }, {
-//   "name": "John Doe",
-//   "email": "jdoe@gmail.com",
-//   "number": "01875510966",
-//   "btnClass": "danger",
-//   "gender": "Male",
-//   "imageSource": `${pic3}`,
-//   "maritalStatus": "single",
-//   "age":19,
-// }]
-
+let newArray = []
 const initialState = {
   user: [],
-  searchUser:{}
+  searchUser: {}
 };
 
 const createUser = (state, action) => {
   return [...state.user, action.payload]; //Copying state array 
 }
 
-
+const removeUser = (state, action) => {
+  newArray = [...state.user]
+  newArray[action.payload.id] = action.payload.payload
+  return newArray
+}
 
 export default function reducer1(state = initialState, action) {
   switch (action.type) {
+    //fetch users data from API
     case "SET_USERS":
       return { ...state, user: action.payload };
-    case "ADD-USER":
-      let newArray = createUser(state, action)
+    //add a new user
+    case "ADD_USER":
+      newArray = createUser(state, action)
       return { ...state, user: newArray };
+    //search user by id
     case "SEARCH_USER":
       return { ...state, searchUser: action.payload };
+    //clear previous searched user
+    case "CLEAR_USER":
+      return { ...state, searchUser: {} };
+    //edit user details
+    case "EDIT_USER":
+      return { ...state, searchUser: action.payload };
+    //delete user details
+    case "DELETE_USER":
+      newArray = removeUser(state, action)
+      return { ...state, user: newArray };
     default:
       return state;
   }

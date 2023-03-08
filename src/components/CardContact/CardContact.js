@@ -9,54 +9,80 @@ import {
 } from "react-router-dom";
 
 export function CardContact() {
-
+    const dispatch = useDispatch();
     const users = useSelector((state) =>
         state.cardDetailReducer.user,
     );
 
+    const remove = (id) => {
+        fetch(`https://dummyjson.com/users/${id}`, {
+            method: 'DELETE',
+          })
+          .then(res => res.json())
+          .then(payload => dispatch({
+            type: "DELETE_USER",
+            payload:{
+                id,
+                payload
+            }
+        }));
+                      
+    }
+
+    const update = (id) => {
+
+    }
+
     return (
         <>
             {users?.map((item, index) =>
-                <Link to={`/user/${item.id}`}>
 
-                    <Card key={index} className="my-2 bg-light">
-                        <CardBody>
-                            <Row>
-                                <Col xs='10'>
-                                    <CardTitle tag="h5">
-                                        {item.username}
-                                    </CardTitle>
-                                    <CardText>
-                                        <FontAwesomeIcon icon={faEnvelopeOpen} /> {item.email} <br />
-                                        <FontAwesomeIcon icon={faPhone} />  {item.phone}
-                                    </CardText>
+
+                <Card key={index} className="my-2 bg-light">
+                    <CardBody>
+                        <Row>
+                            <Col xs='10'>
+                                <CardTitle tag="h5">
+                                    {item.username}
+                                </CardTitle>
+                                <CardText>
+                                    <FontAwesomeIcon icon={faEnvelopeOpen} /> {item.email} <br />
+                                    <FontAwesomeIcon icon={faPhone} />  {item.phone}
+                                </CardText>
+                                <Button
+                                    className='m-1'
+                                    onClick={() => update(item.id)}
+                                    color='secondary'
+                                >Edit
+                                </Button>
+                                <Button
+                                    className='m-1'
+                                    onClick={() => remove(item.id)}
+                                    color='danger'>
+                                    Delete
+                                </Button>
+                                <Link to={`/user/${item.id}`} style={{ textDecoration: 'none', color: 'black' }} key={index}>
                                     <Button
-                                        // onClick={() => item.update(item.index)}
-                                        color='secondary'
-                                    >Edit
-                                    </Button>
-                                    <Button
-                                        // onClick={() => item.remove(item.index)}
-                                        color='danger'>
-                                        Delete
-                                    </Button>
-                                </Col>
-                                <Col >
-                                    <Button
-                                        color={item.btnClass}>
-                                        {item.gender}
-                                    </Button>
-                                    <CardImg
-                                        alt="Card image cap"
-                                        bottom
-                                        src={item.image}
-                                        width="100%"
-                                    />
-                                </Col>
-                            </Row>
-                        </CardBody>
-                    </Card>
-                </Link>
+                                        className='m-1'
+                                        color='warning'>
+                                        View
+                                    </Button></Link>
+                            </Col>
+                            <Col >
+                                <Button
+                                    color={item.btnClass}>
+                                    {item.gender}
+                                </Button>
+                                <CardImg
+                                    alt="Card image cap"
+                                    bottom
+                                    src={item.image}
+                                    width="100%"
+                                />
+                            </Col>
+                        </Row>
+                    </CardBody>
+                </Card>
             )}
         </>
     )

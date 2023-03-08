@@ -12,6 +12,9 @@ import {
     Input,
 } from 'reactstrap';
 
+import {
+    Link,
+} from "react-router-dom";
 
 export function Login() {
     return (
@@ -55,9 +58,9 @@ export function Login() {
                     </Form>
                 </CardBody>
                 <CardFooter>
-                    <Button className='float-end' color='primary'>
+                   <Link to='/' style={{ textDecoration: 'none' }}> <Button className='float-end' color='primary'>
                         Login
-                    </Button>
+                    </Button></Link>
                 </CardFooter>
             </Card>
         </Container>
