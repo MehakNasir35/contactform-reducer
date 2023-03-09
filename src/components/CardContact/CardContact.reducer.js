@@ -1,7 +1,8 @@
 let newArray = []
 const initialState = {
   user: [],
-  searchUser: {}
+  searchUser: {},
+  selectUser:{}
 };
 
 const createUser = (state, action) => {
@@ -10,7 +11,15 @@ const createUser = (state, action) => {
 
 const removeUser = (state, action) => {
   newArray = [...state.user]
-  newArray[action.payload.id] = action.payload.payload
+  let index = action.payload.id - 1
+  newArray.splice(index, 1);
+  return newArray
+}
+
+const updateUser = (state, action) => {
+  newArray = [...state.user]
+  let index = action.payload.id - 1
+  newArray[index] = action.payload
   return newArray
 }
 
@@ -31,7 +40,10 @@ export default function reducer1(state = initialState, action) {
       return { ...state, searchUser: {} };
     //edit user details
     case "EDIT_USER":
-      return { ...state, searchUser: action.payload };
+      newArray = updateUser(state, action)
+      return { ...state,user: newArray };
+    case "SELECT_USER":
+      return { ...state, selectUser: action.payload };
     //delete user details
     case "DELETE_USER":
       newArray = removeUser(state, action)

@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { Home } from './views/Home';
 import { Login } from './views/Login';
 import { UserDetail } from './views/UserDetail';
-
+import {composeWithDevTools} from 'redux-devtools-extension';
 import {
   BrowserRouter,
   Routes,

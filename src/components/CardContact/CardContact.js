@@ -9,10 +9,18 @@ import {
 } from "react-router-dom";
 
 export function CardContact() {
+
     const dispatch = useDispatch();
+
     const users = useSelector((state) =>
         state.cardDetailReducer.user,
     );
+
+    const selectUser = (id) => {
+        fetch(`https://dummyjson.com/users/${id}`)
+            .then(res => res.json())
+            .then(data => dispatch({ type: "SELECT_USER", payload: data }));
+    }
 
     const remove = (id) => {
         fetch(`https://dummyjson.com/users/${id}`, {
@@ -29,15 +37,9 @@ export function CardContact() {
                       
     }
 
-    const update = (id) => {
-
-    }
-
     return (
         <>
             {users?.map((item, index) =>
-
-
                 <Card key={index} className="my-2 bg-light">
                     <CardBody>
                         <Row>
@@ -51,7 +53,7 @@ export function CardContact() {
                                 </CardText>
                                 <Button
                                     className='m-1'
-                                    onClick={() => update(item.id)}
+                                    onClick={() => selectUser(item.id)}
                                     color='secondary'
                                 >Edit
                                 </Button>
