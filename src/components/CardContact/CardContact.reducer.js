@@ -2,7 +2,11 @@ let newArray = []
 const initialState = {
   user: [],
   searchUser: {},
-  selectUser:{}
+  id: '',
+  username: '',
+  email: '',
+  phone: '',
+  gender: '',
 };
 
 const createUser = (state, action) => {
@@ -41,13 +45,15 @@ export default function reducer1(state = initialState, action) {
     //edit user details
     case "EDIT_USER":
       newArray = updateUser(state, action)
-      return { ...state,user: newArray };
+      return { ...state, user: newArray };
     case "SELECT_USER":
-      return { ...state, selectUser: action.payload };
+      return { ...state, id: action.payload.id, username: action.payload.username, email: action.payload.email, gender: action.payload.gender, phone: action.payload.phone };
     //delete user details
     case "DELETE_USER":
       newArray = removeUser(state, action)
       return { ...state, user: newArray };
+    case "SET_VALUES":
+      console.log(action)
     default:
       return state;
   }

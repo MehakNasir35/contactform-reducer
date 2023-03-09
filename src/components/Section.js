@@ -12,14 +12,11 @@ export function Section() {
 
     const dispatch = useDispatch();
 
-    const [username, setUserName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const [gender, setGender] = useState('female');
-
     const submitHandler = (e) => {
 
         e.preventDefault();
+
+        const { name, email, number, gender } = e.target;
 
         let image = `${pic8}`
 
@@ -28,12 +25,12 @@ export function Section() {
         }
 
         const payload = {
-            username: username,
+            username: name.value,
             firstName: "first",
             lastName: "last",
-            email: email,
-            phone: phone,
-            gender: gender,
+            email: email.value,
+            phone: number.value,
+            gender: gender.value,
             age: 23,
             birthDate: '2000-12-25',
             bloodGroup: 'A−',
@@ -60,7 +57,7 @@ export function Section() {
 
         }
 
-        if (Object.keys(user).length === 0) {
+        if (!id) {
             fetch('https://dummyjson.com/users/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -73,7 +70,7 @@ export function Section() {
                 }));
         }
         else {
-            fetch(`https://dummyjson.com/users/${user.id}`, {
+            fetch(`https://dummyjson.com/users/${id}`, {
                 method: 'PUT', /* or PATCH */
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -83,39 +80,26 @@ export function Section() {
                     type: "EDIT_USER",
                     payload
                 }))
-                .then(() => {
-
-                    user = {}
-
-                    dispatch({
-                        type: "SELECT_USER",
-                        payload: {}
-                    })
-                });
         }
     };
 
-    const typeChange = (e) => {
-        setGender(e.currentTarget.value);
+    let {id,name,email,phone,gender} = useSelector((state) => ({
+        name: state.reducer1.username,
+        id: state.reducer1.id,
+        email: state.reducer1.email,
+        phone: state.reducer1.phone,
+        gender: state.reducer1.gender,
+      }));
+
+    const setValue = (e) => {
+        dispatch({
+            type: "SET_VALUES",
+            payload: {
+                target: e.target,
+                value: e.target.value
+            }
+        })
     }
-
-    let user = useSelector((state) =>
-        state.cardDetailReducer.selectUser
-    );
-
-    useEffect(() => {
-        if (Object.keys(user).length != 0) {
-            setUserName(user.username)
-            setEmail(user.email)
-            setPhone(user.phone)
-            setGender(user.gender)
-        }else{
-            setUserName('')
-            setEmail('')
-            setPhone('')
-            setGender('female')
-        }
-    }, [user])
 
     return (
         /* <!-- first section start -->
@@ -131,8 +115,8 @@ export function Section() {
                     type='text'
                     name={'name'}
                     id="name"
-                    // onChange={e => setUserName(e.target.value)}
-                    value={username}
+                    onChange={e => setValue(e)}
+                    value={name}
                     placeholder="Name"
                 />
                 <Input
@@ -140,18 +124,18 @@ export function Section() {
                     type='email'
                     name={'email'}
                     id='email'
-                    // onChange={e => setEmail(e.target.value)}
-                    value={email}
+                    onChange={e => setValue(e)}
                     placeholder="Email"
+                    value={email}
                 />
                 <Input
                     className="mb-1"
                     type='tel'
                     name={'number'}
                     id='number'
-                    // onChange={e => setPhone(e.target.value)}
-                    value={phone}
+                    onChange={e => setValue(e)}
                     placeholder="Number"
+                    value={phone}
                 />
                 {/* <!-- input fields end --> */}
 
@@ -164,7 +148,6 @@ export function Section() {
                             type="radio"
                             name="gender"
                             value="female"
-                            onChange={typeChange}
                         /> female
                     </Label>
                 </FormGroup>
@@ -174,7 +157,6 @@ export function Section() {
                             type="radio"
                             name="gender"
                             value="male"
-                            onChange={typeChange}
                         /> male
                     </Label>
                 </FormGroup>
@@ -190,7 +172,7 @@ export function Section() {
                         block
                         color={'primary'}
                     >
-                        {Object.keys(user).length === 0 ? 'Add Contact' : 'Edit Contact'}
+                        {id ? 'Add Contact' : 'Edit Contact'}
 
                     </Button>
 
