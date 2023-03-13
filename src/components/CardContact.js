@@ -19,7 +19,7 @@ export function CardContact() {
     const { isLoading, isError, data, error } = useUsers()
 
     if (isLoading) {
-        return <Spinner cen animation="grow" />;
+        return <Spinner animation="grow" />;
     }
 
     if (isError) {

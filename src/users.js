@@ -1,7 +1,7 @@
 import { useQuery, useMutation } from '@tanstack/react-query'
 import axios from "axios";
-import { QueryClient, QueryClientProvider } from  '@tanstack/react-query';
-const queryClient = new QueryClient({});
+import { useQueryClient } from '@tanstack/react-query'
+
 
 //fetch users
 const useUsers = () => {
@@ -16,14 +16,24 @@ const useUsers = () => {
 
 //add user
 const useAddUsers = () => {
+    const queryClient = useQueryClient()
+
     return useMutation({
         mutationFn: (data) => {
             return axios
-            .post('https://dummyjson.com/users/add', data)
-            .then((res) =>  queryClient.setQueryData(['users'], (old) => [...old, res]))
+                .post('https://dummyjson.com/users/add', data)
+        }, onSuccess: async (res) => {
+            await queryClient.cancelQueries({ queryKey: ['users'] })
+            const previousTodos = queryClient.getQueryData(['users'])
+            queryClient.setQueryData(['users'], (old) => [...old, res.data])
+
+            // Return a context object with the snapshotted value
+            return { previousTodos }
         },
     })
 }
+
+
 
 export {
     useUsers, useAddUsers

@@ -1,12 +1,11 @@
 import addImage from "../images/addimage.jpg"
-import { useQuery, useMutation } from '@tanstack/react-query'
-import axios from "axios";
+
 import React, { useState } from "react";
 import {
-    Input, Button, FormGroup, Label
+    Input, Button, FormGroup, Label, Alert
 } from 'reactstrap';
 import { useAddUsers } from "../users"
-
+import Spinner from 'react-bootstrap/Spinner';
 export function Section() {
 
     //use states 
@@ -18,7 +17,7 @@ export function Section() {
     const submit = () => {
         mutation.mutate({ username, email, gender, phone })
     }
-    
+
     //custom hook
     const mutation = useAddUsers()
 
@@ -29,14 +28,16 @@ export function Section() {
         <section className="col-12 col-md-6 col-lg-6">
             <div>
                 {mutation.isLoading ? (
-                    'Adding User...'
+                    <Spinner className="mt-1" animation="grow" />
                 ) : (
                     <>
                         {mutation.isError ? (
                             <div>An error occurred: {mutation.error.message}</div>
                         ) : null}
 
-                        {mutation.isSuccess ? <div>User added!</div> : null}
+                        {mutation.isSuccess ? <Alert className="mt-1" color="primary">
+                            User Added
+                        </Alert> : null}
 
                     </>
                 )}
