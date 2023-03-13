@@ -3,23 +3,20 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelopeOpen, faPhone } from '@fortawesome/free-solid-svg-icons'
 
-import { useQuery } from '@tanstack/react-query'
-import axios from "axios";
+
 import {
     Card, CardImg, CardBody, CardTitle, CardText, Button, Row, Col
 } from 'reactstrap';
 import Spinner from 'react-bootstrap/Spinner';
+import { useUsers } from "../users"
 
 export function CardContact() {
 
+    const editUser = (id) => {
 
-    const { isLoading, isError, data, error } = useQuery({
-        queryKey: ['users'],
-        queryFn: () =>
-            axios
-                .get('https://dummyjson.com/users?limit=5')
-                .then((res) => res.data.users),
-    })
+    }
+
+    const { isLoading, isError, data, error } = useUsers()
 
     if (isLoading) {
         return <Spinner cen animation="grow" />;
@@ -50,6 +47,7 @@ export function CardContact() {
                                         <FontAwesomeIcon icon={faPhone} /> {item.phone}
                                     </CardText>
                                     <Button
+                                        onClick={() => editUser(item.id)}
                                         color='secondary'
                                     >Edit
                                     </Button>

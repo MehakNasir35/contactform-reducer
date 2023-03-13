@@ -1,18 +1,47 @@
 import addImage from "../images/addimage.jpg"
-
+import { useQuery, useMutation } from '@tanstack/react-query'
+import axios from "axios";
+import React, { useState } from "react";
 import {
     Input, Button, FormGroup, Label
 } from 'reactstrap';
+import { useAddUsers } from "../users"
 
 export function Section() {
 
-    // const useUser = () => useQuery('user', fetchFunction)
-    // const { user } = useUser()
+    //use states 
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [gender, setGender] = useState('female')
+    const [phone, setPhone] = useState('')
+
+    const submit = () => {
+        mutation.mutate({ username, email, gender, phone })
+    }
+    
+    //custom hook
+    const mutation = useAddUsers()
 
     return (
+
         /* <!-- first section start -->
   <!-- naming first column as section --> */
         <section className="col-12 col-md-6 col-lg-6">
+            <div>
+                {mutation.isLoading ? (
+                    'Adding User...'
+                ) : (
+                    <>
+                        {mutation.isError ? (
+                            <div>An error occurred: {mutation.error.message}</div>
+                        ) : null}
+
+                        {mutation.isSuccess ? <div>User added!</div> : null}
+
+                    </>
+                )}
+            </div>
+
             {/* <!-- mid heading --> */}
             <h3 className="text-center mt-3 text-primary">Add Contact</h3>
             <form>
@@ -21,19 +50,25 @@ export function Section() {
                 <Input
                     className="mb-1"
                     type='text'
-                    name={'name'}
+                    name={'username'}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     placeholder="Name"
                 />
                 <Input
                     className="mb-1"
                     type='email'
                     name={'email'}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email"
                 />
                 <Input
                     className="mb-1"
                     type='tel'
-                    name={'number'}
+                    name={'phone'}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     placeholder="Number"
                 />
                 {/* <!-- input fields end --> */}
@@ -47,7 +82,7 @@ export function Section() {
                             type="radio"
                             name="radio1"
                             value="female"
-                         /> female
+                        /> female
                     </Label>
                 </FormGroup>
                 <FormGroup check inline>
@@ -67,7 +102,9 @@ export function Section() {
                 <input type="file" className="mb-1" />
                 <div>
                     <Button
-                       
+                        onClick={() => {
+                            submit()
+                        }}
                         block
                         color={'primary'}
                     >
