@@ -1,37 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelopeOpen, faPhone } from '@fortawesome/free-solid-svg-icons'
 
+import { useQuery } from '@tanstack/react-query'
+import axios from "axios";
 import {
     Card, CardImg, CardBody, CardTitle, CardText, Button, Row, Col
 } from 'reactstrap';
-
+import Spinner from 'react-bootstrap/Spinner';
 
 export function CardContact() {
 
-    var users = [{
-        "name": "Erafi Ahonaf",
-        "email": "erafi@gmail.com",
-        "phone": "01875510966",
-        "btnClass": "btn-success",
-        "gender": "Professional",
-        "imageSource": "pic2.png",
-    }, {
-        "name": "Ishan Sarkar",
-        "email": "ishan@gmail.com",
-        "phone": "01719058105",
-        "btnClass": "btn-primary",
-        "gender": "Personal",
-        "imageSource": "pic1.png",
-    }, {
-        "name": "John Doe",
-        "email": "jdoe@gmail.com",
-        "phone": "01875510966",
-        "btnClass": "btn-success",
-        "gender": "Professional",
-        "imageSource": "pic3.png",
-    }]
+
+    const { isLoading, isError, data, error } = useQuery({
+        queryKey: ['users'],
+        queryFn: () =>
+            axios
+                .get('https://dummyjson.com/users?limit=5')
+                .then((res) => res.data.users),
+    })
+
+    if (isLoading) {
+        return <Spinner cen animation="grow" />;
+    }
+
+    if (isError) {
+        return <span>Error: {error.message}</span>
+    }
+
+    //if success
+    let users = data
 
     return (
         <>
@@ -39,7 +38,7 @@ export function CardContact() {
                 /* cards array map */
                 users.map((item, index) =>
 
-                    <Card className="my-2 bg-light">
+                    <Card key={index} className="my-2 bg-light">
                         <CardBody>
                             <Row>
                                 <Col xs='10'>
@@ -68,6 +67,7 @@ export function CardContact() {
                                         alt="Card image cap"
                                         bottom
                                         width="100%"
+                                        src={item.image}
                                     />
                                 </Col>
                             </Row>

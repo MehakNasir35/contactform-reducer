@@ -5,6 +5,10 @@ import {
 } from 'reactstrap';
 
 export function Section() {
+
+    // const useUser = () => useQuery('user', fetchFunction)
+    // const { user } = useUser()
+
     return (
         /* <!-- first section start -->
   <!-- naming first column as section --> */
