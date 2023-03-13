@@ -16,20 +16,20 @@ export function Section() {
 
         e.preventDefault();
 
-        const { name, email, number, gender } = e.target;
+        const { username, email, phone, gender } = e.target;
 
         let image = `${pic8}`
 
-        if (gender == "Male") {
+        if (gender == "male") {
             image = `${pic4}`
         }
 
         const payload = {
-            username: name.value,
+            username: username.value,
             firstName: "first",
             lastName: "last",
             email: email.value,
-            phone: number.value,
+            phone: phone.value,
             gender: gender.value,
             age: 23,
             birthDate: '2000-12-25',
@@ -83,23 +83,23 @@ export function Section() {
         }
     };
 
-    let {id,name,email,phone,gender} = useSelector((state) => ({
-        name: state.reducer1.username,
-        id: state.reducer1.id,
-        email: state.reducer1.email,
-        phone: state.reducer1.phone,
-        gender: state.reducer1.gender,
-      }));
+    let { id, username, email, phone, gender } = useSelector((state) => ({
+        username: state.cardDetailReducer.username,
+        id: state.cardDetailReducer.id,
+        email: state.cardDetailReducer.email,
+        phone: state.cardDetailReducer.phone,
+        gender: state.cardDetailReducer.gender,
+    }));
 
-    const setValue = (e) => {
-        dispatch({
-            type: "SET_VALUES",
-            payload: {
-                target: e.target,
-                value: e.target.value
-            }
-        })
-    }
+    // const setValue = (e) => {
+    //     dispatch({
+    //         type: "SET_VALUES",
+    //         payload: {
+    //             target: e.target,
+    //             value: e.target.value
+    //         }
+    //     })
+    // }
 
     return (
         /* <!-- first section start -->
@@ -113,10 +113,10 @@ export function Section() {
                 <Input
                     className="mb-1"
                     type='text'
-                    name={'name'}
-                    id="name"
-                    onChange={e => setValue(e)}
-                    value={name}
+                    name={'username'}
+                    id="username"
+                    onChange={e => dispatch({ type: "SET_NAME", payload: e.target.value })}
+                    value={username}
                     placeholder="Name"
                 />
                 <Input
@@ -124,16 +124,16 @@ export function Section() {
                     type='email'
                     name={'email'}
                     id='email'
-                    onChange={e => setValue(e)}
+                    onChange={e => dispatch({ type: "SET_EMAIL", payload: e.target.value })}
                     placeholder="Email"
                     value={email}
                 />
                 <Input
                     className="mb-1"
                     type='tel'
-                    name={'number'}
-                    id='number'
-                    onChange={e => setValue(e)}
+                    name={'phone'}
+                    id='phone'
+                    onChange={e => dispatch({ type: "SET_PHONE", payload: e.target.value })}
                     placeholder="Number"
                     value={phone}
                 />
@@ -148,6 +148,8 @@ export function Section() {
                             type="radio"
                             name="gender"
                             value="female"
+                            onChange={e => dispatch({ type: "SET_GENDER", payload: e.target.value })}
+                            checked={gender == 'female'}
                         /> female
                     </Label>
                 </FormGroup>
@@ -157,6 +159,8 @@ export function Section() {
                             type="radio"
                             name="gender"
                             value="male"
+                            onChange={e => dispatch({ type: "SET_GENDER", payload: e.target.value })}
+                            checked={gender == 'male'}
                         /> male
                     </Label>
                 </FormGroup>
@@ -168,20 +172,13 @@ export function Section() {
                 <input type="file" className="mb-1" />
                 <div>
                     <Button
-
                         block
-                        color={'primary'}
+                        color={id ? 'warning' : 'primary'}
                     >
-                        {id ? 'Add Contact' : 'Edit Contact'}
-
+                        {id ? 'Edit Contact' : 'Add Contact'}
                     </Button>
-
-
                 </div>
             </form>
-
-
-
         </section>
     )
 }

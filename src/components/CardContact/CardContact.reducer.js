@@ -47,13 +47,23 @@ export default function reducer1(state = initialState, action) {
       newArray = updateUser(state, action)
       return { ...state, user: newArray };
     case "SELECT_USER":
-      return { ...state, id: action.payload.id, username: action.payload.username, email: action.payload.email, gender: action.payload.gender, phone: action.payload.phone };
+      return {
+        ...state, id:
+          action.payload.id, username: action.payload.username, email: action.payload.email, gender: action.payload.gender, phone: action.payload.phone
+      };
     //delete user details
     case "DELETE_USER":
       newArray = removeUser(state, action)
       return { ...state, user: newArray };
-    case "SET_VALUES":
-      console.log(action)
+    //update data for input fields
+    case "SET_NAME":
+      return { ...state, username: action.payload };
+    case "SET_EMAIL":
+      return { ...state, email: action.payload };
+    case "SET_GENDER":
+      return { ...state, gender: action.payload };
+    case "SET_PHONE":
+      return { ...state, phone: action.payload };
     default:
       return state;
   }
