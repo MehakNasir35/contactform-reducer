@@ -33,6 +33,22 @@ const useAddUsers = () => {
     })
 }
 
+const useSelectUser = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (data) => {
+            return axios
+                .get(`https://dummyjson.com/users/${data.id}`)
+        }, onSuccess: async (res) => {
+            newUser=res.data
+          return  useQuery({ queryKey: ['users', { id: newUser.id }] })
+            debugger
+        }, onSettled: (res) => {
+
+        },
+    })
+}
+
 //edit user
 const useEditUser = () => {
     const queryClient = useQueryClient()
@@ -41,9 +57,7 @@ const useEditUser = () => {
             return axios
                 .put(`https://dummyjson.com/users/${data.id}`, data)
         }, onSuccess: async (res) => {
-            const newUser = res.data
-            await queryClient.cancelQueries({ queryKey: ['users', newUser.id] })
-            const previousTodo = queryClient.getQueryData(['users', newUser.id])
+
             debugger
         }, onSettled: (res) => {
             const newUser = res.data
@@ -54,5 +68,5 @@ const useEditUser = () => {
 }
 
 export {
-    useUsers, useAddUsers, useEditUser
+    useUsers, useAddUsers, useEditUser,useSelectUser
 }

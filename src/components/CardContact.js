@@ -9,7 +9,7 @@ import {
 
 import Spinner from 'react-bootstrap/Spinner';
 
-import { useUsers, useEditUser } from "../users"
+import { useUsers, useEditUser,useSelectUser } from "../users"
 
 export function CardContact() {
 
@@ -33,6 +33,7 @@ export function CardContact() {
         setUsername("mn")
         setEmail("mn")
         setPhone("mn")
+        mutation.mutate({ id })
         toggle()
     }
 
@@ -44,6 +45,7 @@ export function CardContact() {
 
     //custom hook for editting contact
     const mutation = useEditUser()
+    const selectUser = useSelectUser()
 
     //fetch users react query hook
     const { isLoading, isError, data, error } = useUsers()
