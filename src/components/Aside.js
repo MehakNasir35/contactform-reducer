@@ -1,7 +1,7 @@
 import { CardContact } from "./CardContact"
 
 import {
-    Input
+    Input, Row
 } from 'reactstrap';
 
 export function Aside() {
@@ -17,7 +17,10 @@ export function Aside() {
                 placeholder="Filter Contacts..."
             />
 
+            {/* cards of users */}
+            <Row>
                 <CardContact />
+            </Row>
 
         </aside>
         // {/* <!-- second section end  --> */}

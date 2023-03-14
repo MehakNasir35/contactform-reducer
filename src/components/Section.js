@@ -8,28 +8,30 @@ import { useAddUsers } from "../users"
 import Spinner from 'react-bootstrap/Spinner';
 export function Section() {
 
-    //use states 
+    //use states for input fields
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [gender, setGender] = useState('female')
     const [phone, setPhone] = useState('')
 
+    //on form submit, call mutation
     const submit = () => {
         mutation.mutate({ username, email, gender, phone })
     }
 
-    //custom hook
+    //custom hook for adding contact
     const mutation = useAddUsers()
 
     return (
 
         /* <!-- first section start -->
-  <!-- naming first column as section --> */
+       <!-- naming first column as section --> */
         <section className="col-12 col-md-6 col-lg-6">
-            <div>
-                {mutation.isLoading ? (
-                    <Spinner className="mt-1" animation="grow" />
-                ) : (
+
+            {/* if adding contact is in process, show loader else show success/error message */}
+            {mutation.isLoading ?
+                (<Spinner className="mt-1" animation="grow" />) :
+                (
                     <>
                         {mutation.isError ? (
                             <div>An error occurred: {mutation.error.message}</div>
@@ -41,10 +43,10 @@ export function Section() {
 
                     </>
                 )}
-            </div>
 
             {/* <!-- mid heading --> */}
             <h3 className="text-center mt-3 text-primary">Add Contact</h3>
+
             <form>
                 {/* <!-- input fields start --> */}
 
@@ -103,21 +105,14 @@ export function Section() {
                 <input type="file" className="mb-1" />
                 <div>
                     <Button
-                        onClick={() => {
-                            submit()
-                        }}
+                        onClick={() => { submit() }}
                         block
                         color={'primary'}
                     >
                         Add Contact
                     </Button>
-
-
                 </div>
             </form>
-
-
-
         </section>
     )
 }
