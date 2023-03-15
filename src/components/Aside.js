@@ -1,23 +1,25 @@
 import React, { useEffect } from "react";
 import { CardContact } from "./CardContact"
 import { useDispatch, useSelector } from "react-redux";
-
+import axios from 'axios';
 import {
     Input
 } from 'reactstrap';
 
 export function Aside() {
 
-    let users = useSelector((state) =>
-    ({
-        users: state.cardDetailReducer.user,
-    })
-    );
+    const fetchUsers = () => {
+        console.log("run")
+        axios.get(`http://localhost:5000/users`)
+            .then(res => dispatch({ type: "FETCH", payload: res.data }));
+    }
+
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch({ type: "FETCH" })
+        fetchUsers()
+        // 
     }, [])
 
     return (
@@ -32,16 +34,8 @@ export function Aside() {
             />
 
             {/* cards array map */}
-            {users.map((item, index) =>
-                <CardContact
-                    key={index}
-                    name={item.username}
-                    email={item.email}
-                    number={item.phone}
-                    type={item.gender}
-                    imageSource={item.image}
-                    btnClass={item.btnClass}
-                />)}
+            
+                <CardContact/>
 
         </aside>
         // {/* <!-- second section end  --> */}
