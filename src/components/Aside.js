@@ -8,18 +8,16 @@ import {
 
 export function Aside() {
 
+    const dispatch = useDispatch();
+
     const fetchUsers = () => {
-        console.log("run")
         axios.get(`http://localhost:5000/users`)
             .then(res => dispatch({ type: "FETCH", payload: res.data }));
     }
 
 
-    const dispatch = useDispatch();
-
     useEffect(() => {
         fetchUsers()
-        // 
     }, [])
 
     return (
@@ -33,9 +31,7 @@ export function Aside() {
                 placeholder="Filter Contacts..."
             />
 
-            {/* cards array map */}
-            
-                <CardContact/>
+            <CardContact />
 
         </aside>
         // {/* <!-- second section end  --> */}
