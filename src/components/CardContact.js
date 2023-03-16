@@ -2,19 +2,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelopeOpen, faPhone } from '@fortawesome/free-solid-svg-icons'
 
 import {
-    Card, CardImg, CardBody, CardTitle, CardText, Button, Row, Col
+    Card, CardImg, CardBody, CardTitle, CardText, Button, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter,Input
 } from 'reactstrap';
 import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
+import { useState } from 'react';
 
 
 export function CardContact() {
 
     const dispatch = useDispatch();
 
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState('')
+
+    const [modalShow, setModalShow] = useState(false)
+
     const users = useSelector((state) =>
         state.cardDetailReducer.user,
     );
+
+    const toggle = () => {
+        setModalShow(!modalShow)
+    }
 
     const deleteUser = (id) => {
         axios.delete(`http://localhost:5000/user/${id}`)
@@ -23,7 +34,13 @@ export function CardContact() {
 
     const updateUser = (id) => {
         axios.get(`http://localhost:5000/user/${id}`)
-            .then(res => dispatch({ type: "SET-USER", payload: res.data }));
+            .then(res => dispatch({ type: "SET-USER", payload: res.data }))
+            .then((res)=>{
+                setUsername(res.payload.username)
+                setEmail(res.payload.email)
+                setPhone(res.payload.phone)
+            })
+            .then(toggle);
     }
 
     return (
@@ -67,6 +84,44 @@ export function CardContact() {
                     </CardBody>
                 </Card>
             )}
+{username}
+{email}
+{phone}
+            <Modal isOpen={modalShow} toggle={toggle} >
+                <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+                <ModalBody>
+                <Input
+                    className="mb-1"
+                    type='text'
+                    name={'name'}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Name"
+                />
+
+                <Input
+                    className="mb-1"
+                    type='email'
+                    name={'email'}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                />
+
+                <Input
+                    className="mb-1"
+                    type='tel'
+                    name={'phone'}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="phone"
+                />
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={toggle}>Do Something</Button>{' '}
+                    <Button color="secondary" onClick={toggle}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
 
         </>
 
