@@ -16,7 +16,15 @@ export function Section() {
 
     //on form submit, call mutation
     const submit = () => {
-        mutation.mutate({ username, email, gender, phone })
+        mutation.mutate({
+            "id": 106,
+            username,
+            email,
+            phone,
+            "btnClass": "btn-success",
+            gender
+        })
+
     }
 
     //custom hook for adding contact

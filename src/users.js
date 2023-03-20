@@ -8,8 +8,8 @@ const useUsers = () => {
         queryKey: ['users'],
         queryFn: () =>
             axios
-                .get('https://dummyjson.com/users?limit=3')
-                .then((res) => res.data.users)
+                .get(`http://localhost:5000/users`)
+                .then((res) => res.data)
     })
 }
 
@@ -19,7 +19,7 @@ const useAddUsers = () => {
     return useMutation({
         mutationFn: (data) => {
             return axios
-                .post('https://dummyjson.com/users/add', data)
+                .post('http://localhost:5000/user', data)
         }, onSuccess: async (res) => {
             const newUser = res.data
             await queryClient.cancelQueries({ queryKey: ['users'] })
@@ -38,35 +38,44 @@ const useSelectUser = () => {
     return useMutation({
         mutationFn: (data) => {
             return axios
-                .get(`https://dummyjson.com/users/${data.id}`)
-        }, onSuccess: async (res) => {
-            newUser=res.data
-          return  useQuery({ queryKey: ['users', { id: newUser.id }] })
-            debugger
-        }, onSettled: (res) => {
-
+                .get(`http://localhost:5000/user/${data.id}`)
+                .then((res) => res.data)
         },
+        onSuccess: async (res) => {
+           const newUser = queryClient.setQueryData(['users', { id: res.id }], res)
+            return { newUser }
+        }, onSettled: (res) => {
+            // const newUser = res.data
+            // queryClient.invalidateQueries({ queryKey: [] })
+            queryClient.invalidateQueries('users', { id: res.id })
+        }  
     })
 }
 
+
 //edit user
 const useEditUser = () => {
-    const queryClient = useQueryClient()
+    // const queryClient = useQueryClient()
     return useMutation({
         mutationFn: (data) => {
-            return axios
-                .put(`https://dummyjson.com/users/${data.id}`, data)
+            console.log(data)
+            // return axios
+            //     .put(`https://dummyjson.com/users/${data.id}`, data)
         }, onSuccess: async (res) => {
-
-            debugger
+            // const newUser = res.data
+            // await queryClient.cancelQueries({ queryKey: ['users', newUser.id] })
+            // const previousTodo = queryClient.getQueryData(['users', newUser.id])
+            // // Optimistically update to the new value
+            // queryClient.setQueryData(['users', newUser.id], newUser)
+            // // Return a context with the previous and new todo
+            // return { previousTodo, newUser }
         }, onSettled: (res) => {
-            const newUser = res.data
-            console.log(queryClient.getQueryData(['users']))
-            queryClient.invalidateQueries({ queryKey: ['users', { id: newUser.id }] })
+            // const newUser = res.data
+            // queryClient.invalidateQueries({ queryKey: ['users', { id: newUser.id }] })
         },
     })
 }
 
 export {
-    useUsers, useAddUsers, useEditUser,useSelectUser
+    useUsers, useAddUsers, useEditUser, useSelectUser
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelopeOpen, faPhone } from '@fortawesome/free-solid-svg-icons'
@@ -9,7 +9,7 @@ import {
 
 import Spinner from 'react-bootstrap/Spinner';
 
-import { useUsers, useEditUser,useSelectUser } from "../users"
+import { useUsers, useEditUser, useSelectUser } from "../users"
 
 export function CardContact() {
 
@@ -28,24 +28,25 @@ export function CardContact() {
 
     //open edit modal and set values
     const edit = (id) => {
-        console.log(id)
-        setId(id)
-        setUsername("mn")
-        setEmail("mn")
-        setPhone("mn")
-        mutation.mutate({ id })
+        selectUser.mutate({ id })
         toggle()
     }
 
     //mutaion on edit user
     const editUser = () => {
-        mutation.mutate({ id, username, email, phone })
         toggle()
     }
 
     //custom hook for editting contact
-    const mutation = useEditUser()
     const selectUser = useSelectUser()
+    console.count("username",selectUser.data?.username)
+    console.count("email",selectUser.data?.email)
+    console.count("phone",selectUser.data?.phone)
+   
+
+    // setUsername(selectUser.data?.username)
+    // setEmail(selectUser.data?.email)
+    // setPhone(selectUser.data?.phone)
 
     //fetch users react query hook
     const { isLoading, isError, data, error } = useUsers()
@@ -66,20 +67,20 @@ export function CardContact() {
     return (
         <>
             {/* if adding contact is in process, show loader else show success/error message */}
-            {mutation.isLoading ?
+            {/* {selectUser.isLoading ?
                 (<Spinner className="mt-1" animation="grow" />) :
                 (
                     <>
-                        {mutation.isError ? (
-                            <div>An error occurred: {mutation.error.message}</div>
+                        {selectUser.isError ? (
+                            <div>An error occurred: {selectUser.error.message}</div>
                         ) : null}
 
-                        {mutation.isSuccess ? <Alert className="mt-1" color="primary">
+                        {selectUser.isSuccess ? <Alert className="mt-1" color="primary">
                             User Updated
                         </Alert> : null}
 
                     </>
-                )}
+                )} */}
             {
                 /* cards array map */
                 users.map((item, index) =>
