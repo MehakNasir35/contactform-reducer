@@ -1,55 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelopeOpen, faPhone } from '@fortawesome/free-solid-svg-icons'
 
 import {
-    Card, CardImg, CardBody, CardTitle, CardText, Button, Row, Col, Modal, ModalBody, Input, ModalFooter, ModalHeader, Alert
+    Card, CardImg, CardBody, CardTitle, CardText, Button, Row, Col, Modal, ModalBody, Input, ModalFooter, ModalHeader
 } from 'reactstrap';
 
 import Spinner from 'react-bootstrap/Spinner';
 
-import { useUsers, useEditUser, useSelectUser } from "../users"
-
+import { useUsers, useEditUser, useSelectUser, useDeleteUser } from "../users"
 export function CardContact() {
 
-    //use state for input fields
+
+    //use state for input fields of modal
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
+    const [gender, setGender] = useState('')
     const [id, setId] = useState('')
 
     // Modal open state
     const [modal, setModal] = useState(false);
 
-    // Toggle for Modal
-    const toggle = () =>
-        setModal(!modal);
-
-    //open edit modal and set values
-    const edit = (id) => {
-        selectUser.mutate({ id })
-        toggle()
-    }
-
-    //mutaion on edit user
-    const editUser = () => {
-        toggle()
-    }
-
-    //custom hook for editting contact
-    const selectUser = useSelectUser()
-    console.count("username",selectUser.data?.username)
-    console.count("email",selectUser.data?.email)
-    console.count("phone",selectUser.data?.phone)
-   
-
-    // setUsername(selectUser.data?.username)
-    // setEmail(selectUser.data?.email)
-    // setPhone(selectUser.data?.phone)
-
     //fetch users react query hook
     const { isLoading, isError, data, error } = useUsers()
+
+    //custom hook for selecting contact
+    const selectUser = useSelectUser()
+    // console.count(selectUser.data?.username)
+    // console.count(selectUser.data?.email)
+    // console.count(selectUser.data?.phone)
+    // console.count(setGender.data?.gender)
+
+    const editUser = useEditUser()
+    const deleteUser = useDeleteUser()
 
     //fetch users API in progress
     if (isLoading) {
@@ -64,8 +49,35 @@ export function CardContact() {
     //if success, assign data to users
     let users = data
 
+    // Toggle for Modal
+    const toggle = () =>
+        setModal(!modal);
+
+    //open edit modal and set values
+    const edit = async (id) => {
+        setId(id)
+        //get user with id
+        await selectUser.mutateAsync({ id })
+        console.log('select', selectUser)
+        setUsername(selectUser.data?.username)
+        setEmail(selectUser.data?.email)
+        setPhone(selectUser.data?.phone)
+        toggle()
+    }
+
+    //mutaion on edit user
+    const updateUser = () => {
+        //put request to change data
+        editUser.mutate({ id, username, email, gender, phone })
+        console.log(editUser)
+        toggle()
+    }
+
+
+
     return (
         <>
+
             {/* if adding contact is in process, show loader else show success/error message */}
             {/* {selectUser.isLoading ?
                 (<Spinner className="mt-1" animation="grow" />) :
@@ -81,6 +93,7 @@ export function CardContact() {
 
                     </>
                 )} */}
+
             {
                 /* cards array map */
                 users.map((item, index) =>
@@ -102,6 +115,7 @@ export function CardContact() {
                                         Edit
                                     </Button>
                                     <Button
+                                        onClick={() => { deleteUser.mutate(item.id) }}
                                         color='danger'>
                                         Delete
                                     </Button>
@@ -163,9 +177,9 @@ export function CardContact() {
                         Close
                     </Button>
                     <Button
-                        onClick={() => { editUser() }}
+                        onClick={() => { updateUser() }}
                         color="primary">
-                        Edit
+                        Update
                     </Button>
                 </ModalFooter>
             </Modal>

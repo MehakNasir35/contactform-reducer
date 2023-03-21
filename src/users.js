@@ -33,6 +33,7 @@ const useAddUsers = () => {
     })
 }
 
+//get user with id
 const useSelectUser = () => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -42,40 +43,50 @@ const useSelectUser = () => {
                 .then((res) => res.data)
         },
         onSuccess: async (res) => {
-           const newUser = queryClient.setQueryData(['users', { id: res.id }], res)
-            return { newUser }
+            const newUser = queryClient.setQueryData(['users', { id: res.id }], res)
+            return newUser
         }, onSettled: (res) => {
-            // const newUser = res.data
-            // queryClient.invalidateQueries({ queryKey: [] })
             queryClient.invalidateQueries('users', { id: res.id })
-        }  
+        }
     })
 }
 
 
 //edit user
 const useEditUser = () => {
-    // const queryClient = useQueryClient()
+    const queryClient = useQueryClient()
     return useMutation({
         mutationFn: (data) => {
             console.log(data)
-            // return axios
-            //     .put(`https://dummyjson.com/users/${data.id}`, data)
+            return axios
+                .put(`http://localhost:5000/user`, data)
         }, onSuccess: async (res) => {
-            // const newUser = res.data
-            // await queryClient.cancelQueries({ queryKey: ['users', newUser.id] })
-            // const previousTodo = queryClient.getQueryData(['users', newUser.id])
-            // // Optimistically update to the new value
-            // queryClient.setQueryData(['users', newUser.id], newUser)
-            // // Return a context with the previous and new todo
-            // return { previousTodo, newUser }
+            return res
         }, onSettled: (res) => {
             // const newUser = res.data
-            // queryClient.invalidateQueries({ queryKey: ['users', { id: newUser.id }] })
+            queryClient.invalidateQueries({ queryKey: ['users'] })
+        },
+    })
+}
+
+//delete user
+const useDeleteUser = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (data) => {
+            console.log(data)
+            return axios
+                .delete(`http://localhost:5000/user/${data}`)
+        }, onSuccess: async (res) => {
+            console.log(res)
+            return res
+        }, onSettled: (res) => {
+            // const newUser = res.data
+            queryClient.invalidateQueries({ queryKey: ['users'] })
         },
     })
 }
 
 export {
-    useUsers, useAddUsers, useEditUser, useSelectUser
+    useUsers, useAddUsers, useEditUser, useSelectUser, useDeleteUser
 }
