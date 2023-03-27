@@ -4,10 +4,13 @@ import React, { useState } from "react";
 import {
     Input, Button, FormGroup, Label, Alert
 } from 'reactstrap';
-import { useAddUsers } from "../users"
+import { useAddUsers } from "../hooks/users"
 import Spinner from 'react-bootstrap/Spinner';
 export function Section() {
 
+    //custom hook for adding contact
+    const mutation = useAddUsers()
+    
     //use states for input fields
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
@@ -27,8 +30,6 @@ export function Section() {
 
     }
 
-    //custom hook for adding contact
-    const mutation = useAddUsers()
 
     return (
 

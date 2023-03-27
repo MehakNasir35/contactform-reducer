@@ -6,10 +6,11 @@ import { useQueryClient } from '@tanstack/react-query'
 const useUsers = () => {
     return useQuery({
         queryKey: ['users'],
-        queryFn: () =>
+        queryFn: () => {
             axios
-                .get(`http://localhost:5000/users`)
+                .get(`http://localhost:5000/users`,{credentials:'include'})
                 .then((res) => res.data)
+        }
     })
 }
 

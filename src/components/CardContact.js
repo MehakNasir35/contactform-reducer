@@ -9,7 +9,8 @@ import {
 
 import Spinner from 'react-bootstrap/Spinner';
 
-import { useUsers, useEditUser, useSelectUser, useDeleteUser } from "../users"
+import { useUsers, useEditUser, useSelectUser, useDeleteUser } from "../hooks/users"
+
 export function CardContact() {
 
 
@@ -48,6 +49,7 @@ export function CardContact() {
 
     //if success, assign data to users
     let users = data
+    console.log(users)
 
     // Toggle for Modal
     const toggle = () =>
