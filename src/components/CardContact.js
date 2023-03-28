@@ -49,7 +49,7 @@ export function CardContact() {
 
     //if success, assign data to users
     let users = data
-    console.log('users',users)
+    console.log(users)
 
     // Toggle for Modal
     const toggle = () =>
@@ -59,11 +59,13 @@ export function CardContact() {
     const edit = async (id) => {
         setId(id)
         //get user with id
-        await selectUser.mutateAsync({ id })
-        console.log('select', selectUser)
-        setUsername(selectUser.data?.username)
-        setEmail(selectUser.data?.email)
-        setPhone(selectUser.data?.phone)
+        // await selectUser.mutateAsync({ id })
+        const currentUser = await selectUser.mutateAsync({ id })
+        
+        setEmail(currentUser.email)
+        setPhone(currentUser.phone)
+        setUsername(currentUser.username)
+
         toggle()
     }
 
