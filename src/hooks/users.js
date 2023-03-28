@@ -2,15 +2,17 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import axios from "axios";
 import { useQueryClient } from '@tanstack/react-query'
 
+axios.defaults.withCredentials = true;
+
 //fetch users
 const useUsers = () => {
     return useQuery({
         queryKey: ['users'],
-        queryFn: () => {
+        queryFn: () => 
             axios
-                .get(`http://localhost:5000/users`,{credentials:'include'})
+                .get(`http://localhost:5000/users`)
                 .then((res) => res.data)
-        }
+        
     })
 }
 

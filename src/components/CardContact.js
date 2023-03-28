@@ -49,7 +49,7 @@ export function CardContact() {
 
     //if success, assign data to users
     let users = data
-    console.log(users)
+    console.log('users',users)
 
     // Toggle for Modal
     const toggle = () =>
